@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Session;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,8 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
+        $this->setPageTitle('Categories');
         $category = Category::all();
         return view('backend.pages.categories.index',compact('category'));
     }
@@ -28,6 +30,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $this->setPageTitle('New Category');
         return view('backend.pages.categories.form');
     }
 
@@ -43,9 +46,7 @@ class CategoryController extends Controller
         $request->validated();
 
         // image upload
-        $fileName = $request->file('category_icon');
-        $imageName = uniqid(rand().time()).'.'.$fileName->getClientOriginalExtension();
-        $fileName->move('media/category/',$imageName);
+        $imageName = $this->imageUpload($request->file('category_icon'),'media/category/');
 
         // new category store DB
         Category::create([
@@ -55,19 +56,11 @@ class CategoryController extends Controller
             'status' => $request->status
         ]);
 
+        Session::flash('success','message');
+
         return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -77,6 +70,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $this->setPageTitle('Edit');
         return view('backend.pages.categories.form',compact('category'));
     }
 
@@ -114,9 +108,9 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        $category->delete();
+        Category::find($id)->delete();
         return back();
     }
 }
