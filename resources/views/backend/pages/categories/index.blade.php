@@ -1,5 +1,5 @@
 @extends('layouts.backend')
-@section('title', 'Categories')
+@section('title', $title)
 
 @section('contents')
 
@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card border">
                 <div class="card-header border-bottom py-2">
-                    <h4 class="card-title mb-0 d-flex justify-content-between align-items-center">Categories
+                    <h4 class="card-title mb-0 d-flex justify-content-between align-items-center">{{ $title }}
                         <a href="{{ route('admin.categories.create') }}" class="btn btn-sm btn-primary">Create</a>
                     </h4>
                 </div>
@@ -35,13 +35,13 @@
                                             <a href="{{ route('admin.categories.edit',$value->id) }}" class="btn btn-sm btn-info">Edit</a>
 
                                             <a href="{{ route('admin.categories.destroy',$value->id) }}" class="btn btn-sm btn-danger">Delete</a>
-
                                         </td>
                                     </tr>
                                 @empty
-
+                                    <tr>
+                                        <td colspan="5" class="text-danger text-center">No data found.</td>
+                                    </tr>
                                 @endforelse
-
                             </tbody>
                         </table>
                     </div>
