@@ -1,6 +1,12 @@
 @extends('layouts.backend')
 @section('title', $title)
 
+@push('styles')
+    <style>
+
+    </style>
+@endpush
+
 @section('contents')
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -9,7 +15,7 @@
             <div class="card border">
                 <div class="card-header border-bottom py-2">
                     <h4 class="card-title mb-0 d-flex justify-content-between align-items-center">{{ $title }}
-                        <a href="{{ route('admin.categories.create') }}" class="btn btn-sm btn-primary">Create</a>
+                        <button type="button" class="btn btn-sm btn-primary create-btn" onclick="categoryModal('New Category Create','Save')">Create</a>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -52,3 +58,45 @@
 </div>
 
 @endsection
+
+@push('scripts')
+    
+    <script>
+        function categoryModal(modalTitle,buttonText){
+            
+            let modals = $('#category-modal');
+            modals.modal('show');
+
+            $('.category-modal-title').text(modalTitle);
+            $('.save-btn').text(buttonText);
+
+            $('.category-modal-title')[0].reset();
+        }
+
+        $(document).on('submit', 'form#category-form', function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: "{{ route('admin.categories.store') }}",
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                dataType: 'JSON',
+                cache: false,
+                success: function(data){
+                    if (data.status == 'success') {
+                        $('#category-modal').modal('hide');
+                        $(this)[0].reset();
+
+                        console.log(data);
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+               }
+            })
+            
+        });
+    </script>
+@endpush

@@ -35,7 +35,8 @@
 
     <link rel="stylesheet" href="{{ asset('/') }}backend/vendor/libs/apex-charts/apex-charts.css" />
 
-    <!-- Page CSS -->
+    <!-- internal css -->
+    @stack('styles')
 
     <!-- Helpers -->
     <script src="{{ asset('/') }}backend/vendor/js/helpers.js"></script>
@@ -103,6 +104,11 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- internal js -->
+    @stack('scripts')
 </body>
+
+@include('backend.modals.modal-sm')
 
 </html>

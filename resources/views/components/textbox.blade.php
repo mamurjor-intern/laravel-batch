@@ -1,5 +1,4 @@
 <div class="mb-3">
-
     <label for="{{ $name }}" class="form-label">{{ $labelName }}</label>
 
     <input type="{{ $type ?? 'text' }}" class="form-control form-control-sm {{ $inputClass ?? '' }}" name="{{ $name }}"
@@ -11,5 +10,4 @@
         @enderror
     @endif
         
-
 </div>

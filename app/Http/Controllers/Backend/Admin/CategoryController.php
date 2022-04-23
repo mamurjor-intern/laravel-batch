@@ -40,25 +40,25 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(Request $request)
     {
-        // validate rules
-        $request->validated();
+        if ($request->ajax()) {
+            // image upload
+            $imageName = $this->imageUpload($request->file('category_icon'),'media/category/',null,null);
+            
+            // new category store DB
+            Category::create([
+                'name'   => $request->category_name,
+                'slug'   => Str::slug($request->category_name),
+                'image'  => $imageName,
+                'status' => $request->status
+            ]);
 
-        // image upload
-        $imageName = $this->imageUpload($request->file('category_icon'),'media/category/');
+            $output = ['status'=>'success','message'=>'Category has been saved.'];
 
-        // new category store DB
-        Category::create([
-            'name'   => $request->category_name,
-            'slug'   => Str::slug($request->category_name),
-            'image'  => $imageName,
-            'status' => $request->status
-        ]);
+            return response()->json($output);
+        }
 
-        Session::flash('success','message');
-
-        return back();
     }
 
 
