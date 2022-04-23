@@ -22,7 +22,7 @@ class CategoryController extends Controller
         $category = Category::all();
         return view('backend.pages.categories.index',compact('category'));
     }
-
+  
     /**
      * Show the form for creating a new resource.
      *
