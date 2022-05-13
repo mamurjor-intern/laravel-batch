@@ -9,10 +9,17 @@
             <form enctype="multipart/form-data" id="category-form">
                 @csrf
                 <x-textbox name="category_name" labelName="Category Name"/>
-                
+
                 <x-textbox type="file" name="category_icon" labelName="Category icon" />
 
-                <x-selectbox type="file" name="status" labelName="Status" errorName="status">
+                <x-selectbox name="parent_category" labelName="Parent Category">
+                    <option value="0">Parent Category</option>
+                    @foreach (STATUS as $key=>$value)
+                        <option value="{{ $key }}"> {{ $value }}</option>
+                    @endforeach
+                </x-selectbox>
+
+                <x-selectbox name="status" labelName="Status">
                     <option value="">Select Please</option>
                     @foreach (STATUS as $key=>$value)
                         <option value="{{ $key }}"> {{ $value }}</option>
