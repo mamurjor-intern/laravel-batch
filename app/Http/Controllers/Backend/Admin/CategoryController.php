@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Backend\Admin;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Session;
+use DataTables;
 
 class CategoryController extends Controller
 {
@@ -17,18 +20,39 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $this->setPageTitle('Categories');
         $category = Category::all();
         return view('backend.pages.categories.index',compact('category'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('backend.pages.categories.form');
+
+    public function categoryData(Request $request){
+        if ($request->ajax()) {
+            $getData = DB::table('categories')->select('id','name','slug','status');
+            return DataTables::queryBuilder($getData)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $action = '
+                    <div class="btn-group">
+                        <button type="button" class="dropdown-toggle border-0 bg-white hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-dots-horizontal-rounded"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><button type="button" class="dropdown-item border-0 delete-btn" data-id="'.$row->id.'">Delete</button></li>
+
+                            <li><button type="button" data-id="'.$row->id.'" class="dropdown-item border-0 edit-btn">Edit</button></li>
+
+                            <li><button type="button" data-id="'.$row->id.'" class="dropdown-item border-0 status-btn">Published</button></li>
+                        </ul>
+                    </div>
+                    ';
+
+                    return $action;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
     }
 
     /**
@@ -39,35 +63,28 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        // validate rules
-        $request->validated();
+        if ($request->ajax()) {
 
-        // image upload
-        $fileName = $request->file('category_icon');
-        $imageName = uniqid(rand().time()).'.'.$fileName->getClientOriginalExtension();
-        $fileName->move('media/category/',$imageName);
+            $request->validated();
+            // image upload
+            $imageName = $this->imageUpload($request->file('category_icon'),'media/category/',null,null);
 
-        // new category store DB
-        Category::create([
-            'name'   => $request->category_name,
-            'slug'   => Str::slug($request->category_name),
-            'image'  => $imageName,
-            'status' => $request->status
-        ]);
+            // new category store DB
+            Category::create([
+                'name'      => $request->category_name,
+                'parent_id' => $request->parent_category,
+                'slug'      => Str::slug($request->category_name),
+                'image'     => $imageName,
+                'status'    => $request->status
+            ]);
 
-        return back();
+            $output = ['status'=>'success','message'=>'Category has been saved.'];
+
+            return response()->json($output);
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -77,6 +94,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $this->setPageTitle('Edit');
         return view('backend.pages.categories.form',compact('category'));
     }
 
@@ -114,9 +132,17 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function delete(Request $request)
     {
-        $category->delete();
-        return back();
+        if($request->ajax()){
+            $category = Category::find($request->data);
+            $this->imagedelete($category->image);
+
+            $category->delete();
+
+            $output = ['status'=>'success','message'=>'Category has been deleted!'];
+            return response()->json($output);
+        }
+
     }
 }

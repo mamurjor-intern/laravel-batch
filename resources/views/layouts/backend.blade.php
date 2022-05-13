@@ -10,7 +10,7 @@
 
     <meta name="description" content="" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('/') }}backend/img/favicon/favicon.ico" />
 
@@ -29,19 +29,18 @@
     <link rel="stylesheet" href="{{ asset('/') }}backend/vendor/css/theme-default.css"
         class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{ asset('/') }}backend/css/demo.css" />
-
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('/') }}backend/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css">
+    @toastr_css
     <link rel="stylesheet" href="{{ asset('/') }}backend/vendor/libs/apex-charts/apex-charts.css" />
 
-    <!-- Page CSS -->
+    <!-- internal css -->
+    @stack('styles')
 
     <!-- Helpers -->
     <script src="{{ asset('/') }}backend/vendor/js/helpers.js"></script>
-
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('/') }}backend/js/config.js"></script>
 </head>
 
@@ -81,9 +80,8 @@
         <!-- Overlay -->
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-    <!-- / Layout wrapper -->
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
+
+    <!-- Layout wrapper -->
     <script src="{{ asset('/') }}backend/vendor/libs/jquery/jquery.js"></script>
     <script src="{{ asset('/') }}backend/vendor/libs/popper/popper.js"></script>
     <script src="{{ asset('/') }}backend/vendor/js/bootstrap.js"></script>
@@ -93,16 +91,107 @@
     <!-- endbuild -->
 
     <!-- Vendors JS -->
+    <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('/') }}backend/vendor/libs/apex-charts/apexcharts.js"></script>
+    @toastr_js
+    @toastr_render
 
     <!-- Main JS -->
     <script src="{{ asset('/') }}backend/js/main.js"></script>
 
     <!-- Page JS -->
     <script src="{{ asset('/') }}backend/js/dashboards-analytics.js"></script>
-
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+        let _token = '{{ csrf_token() }}';
+
+        function deleteData(deleteId){
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-'+deleteId).submit();
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                }
+            })
+        }
+
+        function flashMessage(status,message){
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            switch (status) {
+                case 'success':
+                    toastr.success(message, 'Success')
+                    break;
+                case 'error':
+                    toastr.error(message, 'Error')
+                    break;
+                case 'info':
+                    toastr.info(message, 'Info')
+                    break;
+                case 'warning':
+                    toastr.warning(message, 'Warning')
+                    break;
+            }
+        }
+
+        function datatableAction(data,url,method,alertTitle,dataTableId){
+            Swal.fire({
+            title: alertTitle,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: {_token:_token,data:data},
+                        dataType: 'JSON',
+                        cache: false,
+                        success: function(data){
+                            $(dataTableId).DataTable().ajax.reload();
+                            flashMessage(data.status,data.message);
+                        }
+                    })
+                }
+            })
+        }
+
+    </script>
+    <!-- internal js -->
+    @stack('scripts')
 </body>
+
+@include('backend.modals.modal-sm')
 
 </html>
