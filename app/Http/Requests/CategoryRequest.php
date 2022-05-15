@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CategoryRequest extends FormRequest
@@ -12,12 +12,11 @@ class CategoryRequest extends FormRequest
     {
         throw new HttpResponseException(
             response()->json([
-                'status'    =>  false,
-                'errors'    =>  $validator->errors()
-            ], 200)
+                'status'=>false,
+                'errors'=>$validator->errors()
+            ],200)
         );
     }
-
 
     /**
      * Determine if the user is authorized to make this request.

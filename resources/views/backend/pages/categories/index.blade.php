@@ -18,23 +18,21 @@
                         <button type="button" class="btn btn-sm btn-primary create-btn" onclick="categoryModal('New Category Create','Save')">Create</a>
                     </h4>
                 </div>
-                <div class="card-body">
-                    <div class="text-nowrap">
-                        <table class="table" id="category_datatables">
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>name</th>
-                                    <th>slug</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-border-bottom-0">
+                <div class="card-body pt-4">
+                    <table class="table table-striped table-sm" id="category_datatables">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>name</th>
+                                <th>slug</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
 
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -46,17 +44,8 @@
 @push('scripts')
 
     <script>
-        function categoryModal(modalTitle,buttonText){
 
-            let modals = $('#category-modal');
-            modals.modal('show');
-
-            $('.category-modal-title').text(modalTitle);
-            $('.save-btn').text(buttonText);
-
-            $('.category-modal-title')[0].reset();
-        }
-
+        // category get datatables
         $('#category_datatables').DataTable({
             processing: true,
             serverSide: true,
@@ -80,18 +69,32 @@
             bSort: false,
             pageLength: 20,
             language: {
-                lengthMenu: 'Displey _MENU_ per page',
-                zeroRecords: '<span class="text-danger">No Records Found</span>',
-                infoRecords: '<span class="text-dark">No Records Found</span>',
+                processing: '<img src="{{ asset("img/table-loading.svg") }}">',
+                lengthMenu: "Display _MENU_ per page",
+                zeroRecords: "<span class='text-danger'>No Records Found</span>",
+                infoEmpty: "<span class='text-dark'>No Records Found</span>"
             }
         });
 
+        // category create modal
+        function categoryModal(modalTitle,buttonText){
+            $('form#category-form').find('.is-invalid').removeClass('is-invalid');
+            $('form#category-form').find('.error-msg').remove();
+            let modals = $('#category-modal');
+            modals.modal('show'); // modal show
 
+            $('.category-modal-title').text(modalTitle); // modal title
+            $('.save-btn').text(buttonText); // modal save btn text
+
+            $('form#category-form')[0].reset(); // modal form value empty
+        }
+
+        // category form submit
         $(document).on('submit', 'form#category-form', function(e){
             e.preventDefault();
 
             $.ajax({
-                url: "{{ route('admin.categories.store') }}",
+                url: "{{ route('admin.categories.store') }}", // category url
                 type: 'POST',
                 data: new FormData(this),
                 processData: false,
@@ -101,15 +104,17 @@
                 success: function(data){
                     $('form#category-form').find('.is-invalid').removeClass('is-invalid');
                     $('form#category-form').find('.error-msg').remove();
-                    $.each(data.errors, function(key,value){
+
+                    $.each(data.errors, function(key, value){
                         $('form#category-form #'+key).addClass('is-invalid');
                         $('form#category-form #'+key).parent().append('<span class="text-danger error-msg">'+value+'</span>');
                     });
+
                     if (data.status == 'success') {
                         $('#category-modal').modal('hide');
-                        flashMessage(data.status,data.message)
+                        $('form#category-form')[0].reset();
+                        flashMessage(data.status,data.message);
                         $('#category_datatables').DataTable().ajax.reload();
-                        $(this)[0].reset();
                     }
                 },
                 error: function(error){
@@ -119,8 +124,6 @@
 
         });
 
-
-
         $(document).on('click', 'button.delete-btn', function(){
             let dataId = $(this).attr('data-id');
             let url = "{{ route('admin.categories.delete') }}";
@@ -128,6 +131,26 @@
             let alertTitle = 'Are you sure delete?';
             let dataTableId = '#category_datatables';
             datatableAction(dataId,url,method,alertTitle,dataTableId);
+        })
+
+        $(document).on('click', 'button.pending-btn', function(){
+            let dataId = $(this).attr('data-id');
+            let status = $(this).attr('data-status');
+            let url = "{{ route('admin.categories.status') }}";
+            let method = 'POST';
+            let alertTitle = 'Are you sure pending?';
+            let dataTableId = '#category_datatables';
+            statusAction(dataId,status,url,method,alertTitle,dataTableId);
+        })
+
+        $(document).on('click', 'button.published-btn', function(){
+            let dataId = $(this).attr('data-id');
+            let status = $(this).attr('data-status');
+            let url = "{{ route('admin.categories.status') }}";
+            let method = 'POST';
+            let alertTitle = 'Are you sure published?';
+            let dataTableId = '#category_datatables';
+            statusAction(dataId,status,url,method,alertTitle,dataTableId);
         })
 
     </script>

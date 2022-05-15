@@ -169,13 +169,38 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Delete'
+            confirmButtonText: 'Confirm'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
                         url: url,
                         type: method,
-                        data: {_token:_token,data:data},
+                        data: {_token:_token,data:data,status:status},
+                        dataType: 'JSON',
+                        cache: false,
+                        success: function(data){
+                            $(dataTableId).DataTable().ajax.reload();
+                            flashMessage(data.status,data.message);
+                        }
+                    })
+                }
+            })
+        }
+
+        function statusAction(data,status,url,method,alertTitle,dataTableId){
+            Swal.fire({
+            title: alertTitle,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: {_token:_token,data:data,status:status},
                         dataType: 'JSON',
                         cache: false,
                         success: function(data){

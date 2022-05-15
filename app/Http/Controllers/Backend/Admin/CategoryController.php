@@ -28,10 +28,18 @@ class CategoryController extends Controller
 
     public function categoryData(Request $request){
         if ($request->ajax()) {
-            $getData = DB::table('categories')->select('id','name','slug','status');
+            $getData = DB::table('categories')->latest('id')->select('id','name','slug','status');
             return DataTables::queryBuilder($getData)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
+                    if($row->status == 1){
+                        $class = 'pending-btn';
+                        $label = 'Pending';
+                    }
+                    else{
+                        $class = 'published-btn';
+                        $label = 'Published';
+                    }
                     $action = '
                     <div class="btn-group">
                         <button type="button" class="dropdown-toggle border-0 bg-white hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,7 +50,7 @@ class CategoryController extends Controller
 
                             <li><button type="button" data-id="'.$row->id.'" class="dropdown-item border-0 edit-btn">Edit</button></li>
 
-                            <li><button type="button" data-id="'.$row->id.'" class="dropdown-item border-0 status-btn">Published</button></li>
+                            <li><button type="button" data-id="'.$row->id.'" data-status="'.$label.'" class="dropdown-item border-0 '.$class.'">'.$label.'</button></li>
                         </ul>
                     </div>
                     ';
@@ -145,4 +153,24 @@ class CategoryController extends Controller
         }
 
     }
+
+    
+    public function categoryStatus(Request $request){
+        if ($request->ajax()) {
+            if($request->status != 'Pending'){
+                $status = '1';
+            }
+            else{
+                $status = '0';
+            }
+
+            Category::where('id',$request->data)->update([
+                'status'=>$status
+            ]);
+
+            $output = ['status'=>'success','message'=>'Category status '.$request->status.'.'];
+            return response()->json($output);
+        }
+    }
+
 }
