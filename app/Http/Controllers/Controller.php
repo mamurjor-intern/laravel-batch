@@ -61,8 +61,8 @@ class Controller extends BaseController
      *
      * @param $title
      */
-    public function setPageTitle($title){
-        view()->share(['title'=>$title]);
+    public function setPageTitle($title,$metaTitle = null,$metaDescription = null){
+        view()->share(['title'=>$title,'metaTitle'=>$metaTitle,'metaDescription'=>$metaDescription]);
     }
 
 }

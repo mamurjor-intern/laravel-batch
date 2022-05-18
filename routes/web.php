@@ -2,11 +2,8 @@
 
 use App\Http\Controllers\Backend\Admin\CategoryController;
 use App\Http\Controllers\Backend\Admin\DashboardController;
+use App\Http\Controllers\Frontend\FrontController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 //================== Admin Route Group =================//
 Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
@@ -19,4 +16,10 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     //----------------- Category Status ----------------//
     Route::post('category/status',[CategoryController::class, 'categoryStatus'])->name('categories.status');
 
+});
+
+//================== Frontend ================//
+Route::group(['as'=>'frontend.'], function(){
+    //------------ Index page ------------//\
+    Route::get('/',[FrontController::class, 'index']);
 });
