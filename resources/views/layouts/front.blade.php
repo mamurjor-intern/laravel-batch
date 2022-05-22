@@ -33,14 +33,10 @@
         <x-breadcrumb :breadcrumb="$breadcrumb"/>
     @endif
 
-    <div id="tt-pageContent">
-        {{-- slider --}}
-        @include('frontend.include.slider')
 
-        {{-- front contents  --}}
-        @yield('contents')
+    {{-- front contents  --}}
+    @yield('contents')
 
-    </div>
 
     {{-- footer --}}
     @include('frontend.include.footer')

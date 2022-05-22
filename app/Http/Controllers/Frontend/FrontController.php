@@ -11,4 +11,5 @@ class FrontController extends Controller
         $this->setPageTitle('Home','Home','Home');
         return view('frontend.pages.index');
     }
+
 }

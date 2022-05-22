@@ -1,25 +1,34 @@
 <?php
 
-use App\Http\Controllers\Backend\Admin\CategoryController;
-use App\Http\Controllers\Backend\Admin\DashboardController;
-use App\Http\Controllers\Frontend\FrontController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Frontend\FrontController;
+use App\Http\Controllers\Frontend\Auth\AuthController;
+use Illuminate\Support\Facades\Artisan;
 
-//================== Admin Route Group =================//
-Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
-    //---------------- Dashboard ---------------//
-    Route::get('dashboard',[DashboardController::class, 'dashboard'])->name('dashboard');
-    //---------------- Category -----------------//
-    Route::resource('categories',CategoryController::class)->except(['show','create','destroy']);
-    Route::post('category/get-data',[CategoryController::class, 'categoryData'])->name('category.get-data');
-    Route::post('category/delete',[CategoryController::class, 'delete'])->name('categories.delete');
-    //----------------- Category Status ----------------//
-    Route::post('category/status',[CategoryController::class, 'categoryStatus'])->name('categories.status');
-
+Route::get('/', function(){
+    return view('welcome');
 });
+
+
+Auth::routes([
+    'login'=>false, // 404 disable
+    'register'=>false, // 404 disable
+]);
+
+
+//================ Authinticate ================//
+Route::get('signin',[AuthController::class, 'signIn'])->name('signin');
+Route::post('signin/store',[AuthController::class, 'signInStore'])->name('signin.store');
+Route::get('signup',[AuthController::class, 'signUp'])->name('signup');
+Route::post('signup/store',[AuthController::class, 'signUpStore'])->name('signup.store');
 
 //================== Frontend ================//
 Route::group(['as'=>'frontend.'], function(){
     //------------ Index page ------------//\
     Route::get('/',[FrontController::class, 'index']);
+
+
 });
+
+

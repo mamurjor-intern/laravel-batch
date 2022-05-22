@@ -1,12 +1,4 @@
 {
-    "/backend/css/demo.css": "/backend/css/demo.css",
-    "/backend/js/config.js": "/backend/js/config.js",
-    "/backend/js/dashboards-analytics.js": "/backend/js/dashboards-analytics.js",
-    "/backend/js/extended-ui-perfect-scrollbar.js": "/backend/js/extended-ui-perfect-scrollbar.js",
-    "/backend/js/form-basic-inputs.js": "/backend/js/form-basic-inputs.js",
-    "/backend/js/main.js": "/backend/js/main.js",
-    "/backend/js/pages-account-settings-account.js": "/backend/js/pages-account-settings-account.js",
-    "/backend/js/ui-modals.js": "/backend/js/ui-modals.js",
-    "/backend/js/ui-popover.js": "/backend/js/ui-popover.js",
-    "/backend/js/ui-toasts.js": "/backend/js/ui-toasts.js"
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css"
 }

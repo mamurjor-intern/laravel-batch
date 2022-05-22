@@ -65,4 +65,5 @@ class Controller extends BaseController
         view()->share(['title'=>$title,'metaTitle'=>$metaTitle,'metaDescription'=>$metaDescription]);
     }
 
+
 }
