@@ -22,11 +22,15 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+            if (Auth::check() && Auth::user()->role->name === 'Admin') {
+                return redirect()->route('admin.dashboard');
+            }
+            elseif (Auth::check() && Auth::user()->role->name === 'User') {
+                return redirect()->route('user.dashboard');
+            }
+            else{
+                return $next($request);
             }
         }
-
-        return $next($request);
     }
 }

@@ -8,6 +8,7 @@
 	<meta name="author" content="wokiee">
 	<link rel="shortcut icon" href="favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @toastr_css
 	<link rel="stylesheet" href="{{ asset('css') }}/theme.css">
     {{-- internal css  --}}
     @stack('styles')
@@ -53,6 +54,8 @@
     <script src="{{ asset('js') }}/jquery.countdown.min.js"></script>
     <script src="{{ asset('js') }}/lazyload.min.js"></script>
     <script src="{{ asset('js')  }}/main.js"></script>
+    @toastr_js
+    @toastr_render
     <!-- form validation and sending to mail -->
     <script src="{{ asset('js') }}/jquery.form.js"></script>
     <script src="{{ asset('js') }}/jquery.validate.min.js"></script>

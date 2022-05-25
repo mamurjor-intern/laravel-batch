@@ -17,23 +17,41 @@
 						<div class="tt-item">
 							<h2 class="tt-title">PERSONAL INFORMATION</h2>
 							<div class="form-default">
-								<form id="contactform" method="post" novalidate="novalidate">
+								<form method="post" action="{{ route('signup.store') }}" >
+                                    @csrf
 									<div class="form-group">
-										<label for="loginInputName">FIRST NAME *</label>
+										<label for="loginInputName">FULL NAME *</label>
 										<div class="tt-required">* Required Fields</div>
-										<input type="text" name="name" class="form-control" id="loginInputName" placeholder="Enter First Name">
+										<input type="text" name="full_name" class="form-control" id="loginInputName" value="{{ old('full_name') }}" placeholder="Enter First Name">
+
+                                        @error('full_name')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
 									</div>
 									<div class="form-group">
-										<label for="loginLastName">LAST NAME *</label>
-										<input type="text" name="lastName" class="form-control" id="loginLastName" placeholder="Enter Last Name">
+										<label for="loginLastName">USERNAME *</label>
+										<input type="text" name="username" class="form-control" id="loginLastName" value="{{ old('username') }}" placeholder="Enter Last Name">
+
+                                        @error('username')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+
 									</div>
 									<div class="form-group">
 										<label for="loginInputEmail">E-MAIL *</label>
-										<input type="text" name="email" class="form-control" id="loginInputEmail" placeholder="Enter E-mail">
+										<input type="text" name="email" class="form-control" id="loginInputEmail" value="{{ old('email') }}" placeholder="Enter E-mail">
+
+                                        @error('email')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
 									</div>
 									<div class="form-group">
 										<label for="loginInputPassword">PASSWORD *</label>
-										<input type="text" name="passowrd" class="form-control" id="loginInputPassword" placeholder="Enter Password">
+										<input type="password" name="password" class="form-control" id="loginInputPassword" placeholder="Enter Password">
+
+                                        @error('password')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
 									</div>
 									<div class="row">
 										<div class="col-auto">

@@ -29,15 +29,29 @@
                                 <h2 class="tt-title">LOGIN</h2>
                                 If you have an account with us, please log in.
                                 <div class="form-default form-top">
-                                    <form id="customer_login" method="post" novalidate="novalidate">
+                                    <form action="{{ route('signin.store') }}" method="post">
+                                        @csrf
                                         <div class="form-group">
                                             <label for="loginInputName">USERNAME OR E-MAIL *</label>
                                             <div class="tt-required">* Required Fields</div>
-                                            <input type="text" name="name" class="form-control" id="loginInputName" placeholder="Enter Username or E-mail">
+                                            <input type="email" name="email" class="form-control" id="loginInputName" placeholder="Enter Username or E-mail">
+                                            @error('email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="loginInputEmail">PASSWORD *</label>
-                                            <input type="text" name="passowrd" class="form-control" id="loginInputEmail" placeholder="Enter Password">
+                                            <input type="password" name="password" class="form-control" id="loginInputEmail" placeholder="Enter Password">
+                                            @error('password')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                                                <label class="form-check-label" for="remember">Remember</label>
+                                              </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-auto mr-auto">
