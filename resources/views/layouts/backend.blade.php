@@ -32,11 +32,19 @@
     <link rel="stylesheet" href="{{ asset('/') }}backend/css/demo.css" />
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('/') }}backend/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" integrity="sha512-EZSUkJWTjzDlspOoPSpUFR0o0Xy7jdzW//6qhUkoZ9c4StFkVsp9fbbd0O06p9ELS3H486m4wmrCELjza4JEog==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css">
     @toastr_css
     <link rel="stylesheet" href="{{ asset('/') }}backend/vendor/libs/apex-charts/apex-charts.css" />
-
+    <style>
+        .dropify-wrapper > .dropify-message > span > p{
+            font-size: 14px;
+        }
+        .dropify-wrapper {
+            border: 2px dotted #dfdfdf !important;
+        }
+    </style>
     <!-- internal css -->
     @stack('styles')
 
@@ -90,6 +98,7 @@
 
     <script src="{{ asset('/') }}backend/vendor/js/menu.js"></script>
     <!-- endbuild -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9/XBRduxO/z1GblzPrMQoeuew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Vendors JS -->
     <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
@@ -213,6 +222,7 @@
             })
         }
 
+        $('.dropify').dropify();
     </script>
     <!-- internal js -->
     @stack('scripts')
