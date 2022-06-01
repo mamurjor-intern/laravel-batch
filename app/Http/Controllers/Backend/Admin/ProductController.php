@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Backend\Admin;
 
+use Image;
+use DataTables;
 use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use DataTables;
 
 class ProductController extends Controller
 {
@@ -80,8 +83,9 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $categories = Category::with('childCategory')->where(['status'=>'1','parent_id'=>0])->get();
         $this->setPageTitle('New Product Create');
-        return view('backend.pages.products.form');
+        return view('backend.pages.products.form', compact('categories'));
     }
 
     /**
@@ -92,7 +96,45 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $color = explode(',',$request->color);
+        $size = explode(',',$request->size);
+
+        // feature image
+        $featureImage = $this->imageUpload($request->file('feature_image'),'media/product/',300,340);
+
+        // gallery image
+        foreach ($request->file('gallery_image') as  $file) {
+            $imageEx = $file->getClientOriginalExtension();
+            $imageName = uniqid(time().rand()).'.'.$imageEx;
+            $imagePath = 'media/product/gallery/'.$imageName;
+            Image::make($file)->resize(300, 340)->save('media/product/gallery/'.$imageName);
+            $imageArray[] = $imagePath;
+        }
+
+        // gallery image json format
+        $galleryImage = json_encode($imageArray);
+        $categories = json_encode($request->category); // categories
+
+        Product::create([
+            'category_id'    => $categories,
+            'name'           => $request->product_name,
+            'slug'           => Str::slug($request->product_name),
+            'sku'            => $request->sku,
+            'short_desc'     => $request->short_description,
+            'long_desc'      => $request->long_description,
+            'feature_image'  => $featureImage,
+            'gallery_image'  => $galleryImage,
+            'qty'            => $request->quantity,
+            'price'          => $request->price,
+            'discount_price' => $request->discount_price,
+            'color'          => json_encode($color),
+            'size'           => json_encode($size),
+            'is_approved'    => $request->approved
+        ]);
+
+        toastr()->success('Product has been saved.');
+        return redirect()->route('admin.products.index');
+
     }
 
     /**
