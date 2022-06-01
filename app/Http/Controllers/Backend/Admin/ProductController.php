@@ -134,7 +134,6 @@ class ProductController extends Controller
 
         toastr()->success('Product has been saved.');
         return redirect()->route('admin.products.index');
-
     }
 
     /**
