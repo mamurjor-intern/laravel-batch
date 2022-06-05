@@ -25,20 +25,21 @@ class ProductController extends Controller
     }
 
     public function productGetData(Request $request){
-        if ($request->ajax) {
+        if ($request->ajax()) {
             $getData = DB::table('products')->latest('id')
                 ->select('id','name','sku','qty','price','feature_image','is_approved');
+
             return DataTables::queryBuilder($getData)
                 ->addIndexColumn()
                 ->addColumn('feature_image', function($product){
-                    return '<img src="'.$product->feature_image.'" width="100" height="100" alt="'.$product->name.'">';
+                    return '<img src="'.asset($product->feature_image).'" width="100" height="100" alt="'.$product->name.'">';
                 })
                 ->addColumn('approved', function($product){
                     if ($product->is_approved == 1) {
-                        $approved = '<span class="badge badge-sm badge-success">Approved</span>';
+                        $approved = '<span class="badge badge-sm bg-success">Approved</span>';
                     }
                     else{
-                        $approved = '<span class="badge badge-sm badge-success">Pending</span>';
+                        $approved = '<span class="badge badge-sm bg-danger">Pending</span>';
                     }
 
                     return $approved;
@@ -103,12 +104,17 @@ class ProductController extends Controller
         $featureImage = $this->imageUpload($request->file('feature_image'),'media/product/',300,340);
 
         // gallery image
-        foreach ($request->file('gallery_image') as  $file) {
-            $imageEx = $file->getClientOriginalExtension();
-            $imageName = uniqid(time().rand()).'.'.$imageEx;
-            $imagePath = 'media/product/gallery/'.$imageName;
-            Image::make($file)->resize(300, 340)->save('media/product/gallery/'.$imageName);
-            $imageArray[] = $imagePath;
+        if ($request->hasFile('gallery_image')) {
+            foreach ($request->file('gallery_image') as  $file) {
+                $imageEx = $file->getClientOriginalExtension();
+                $imageName = uniqid(time().rand()).'.'.$imageEx;
+                $imagePath = 'media/product/gallery/'.$imageName;
+                Image::make($file)->resize(300, 340)->save('media/product/gallery/'.$imageName);
+                $imageArray[] = $imagePath;
+            }
+        }
+        else{
+            $imageArray[] = NULL;
         }
 
         // gallery image json format

@@ -97,5 +97,27 @@
         </ul>
       </li>
 
+
+      <li class="menu-item {{ Request::is('admin/blog*') ? 'open active' : '' }}">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons bx bx-layout"></i>
+          <div data-i18n="Layouts">Blogs</div>
+        </a>
+
+        <ul class="menu-sub">
+          <li class="menu-item {{ Request::is('admin/blog/categories*') ? 'active' : '' }}">
+            <a href="{{ route('admin.blogs.categories.index') }}" class="menu-link">
+              <div data-i18n="Without menu">Categories</div>
+            </a>
+          </li>
+
+          <li class="menu-item {{ Request::is('admin/blog/posts*') ? 'active' : '' }}">
+            <a href="{{ route('admin.blogs.posts.index') }}" class="menu-link">
+              <div data-i18n="Without menu">Posts</div>
+            </a>
+          </li>
+        </ul>
+      </li>
+
     </ul>
   </aside>
