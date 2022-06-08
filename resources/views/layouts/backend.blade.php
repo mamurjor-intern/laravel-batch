@@ -9,8 +9,6 @@
     <title>@yield('title') - Mamurjor Ecommerce</title>
 
     {{-- meta tag --}}
-    <meta name="title" content="@yield('meta_title')" />
-    <meta name="description" content="@yield('meta_description')" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- Favicon -->

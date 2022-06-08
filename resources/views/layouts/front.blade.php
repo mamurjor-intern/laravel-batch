@@ -5,6 +5,7 @@
 	<title>@yield('title')</title>
 	<meta name="title" content="@yield('meta_title')">
 	<meta name="description" content="@yield('meta_description')">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 	<meta name="author" content="wokiee">
 	<link rel="shortcut icon" href="favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -38,7 +39,6 @@
     {{-- front contents  --}}
     @yield('contents')
 
-
     {{-- footer --}}
     @include('frontend.include.footer')
 
@@ -60,8 +60,12 @@
     <script src="{{ asset('js') }}/jquery.form.js"></script>
     <script src="{{ asset('js') }}/jquery.validate.min.js"></script>
     <script src="{{ asset('js') }}/jquery.form-init.js"></script>
-
+    <script>
+        let _token = '{{ csrf_token() }}';
+    </script>
     {{-- internal js --}}
     @stack('scripts')
 </body>
 </html>
+
+@include('frontend.modal.product-view')

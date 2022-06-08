@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\FrontController;
 use App\Http\Controllers\Frontend\Auth\AuthController;
+use App\Http\Controllers\Frontend\ProductController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function(){
@@ -28,7 +29,10 @@ Route::get('logout',[AuthController::class, 'logOut'])->name('logout');
 Route::group(['as'=>'frontend.'], function(){
     //------------ Index page ------------//\
     Route::get('/',[FrontController::class, 'index']);
-
+    //---------------- Product -----------------//
+    Route::group(['as'=>'product.'], function(){
+        Route::post('product/quick-view',[ProductController::class, 'quickView'])->name('quick-view');
+    });
 
 });
 

@@ -111,14 +111,14 @@ class ProductController extends Controller
                 $imagePath = 'media/product/gallery/'.$imageName;
                 Image::make($file)->resize(300, 340)->save('media/product/gallery/'.$imageName);
                 $imageArray[] = $imagePath;
+                // gallery image json format
+                $galleryImage = json_encode($imageArray);
             }
         }
         else{
-            $imageArray[] = NULL;
+            $galleryImage = NULL;
         }
 
-        // gallery image json format
-        $galleryImage = json_encode($imageArray);
         $categories = json_encode($request->category); // categories
 
         Product::create([
