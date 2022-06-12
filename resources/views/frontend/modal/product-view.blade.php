@@ -40,11 +40,13 @@
 									<a href="#">(1 Customer Review)</a>
 								</div>
 								<div class="tt-wrapper" id="description"></div>
+
 								<div class="tt-swatches-container">
 									<div class="tt-wrapper">
 										<div class="tt-title-options">SIZE</div>
                                         <div class="form-group">
                                             <select class="form-control" id="product-size">
+
                                             </select>
                                         </div>
 									</div>
@@ -52,6 +54,7 @@
 										<div class="tt-title-options">COLOR</div>
                                         <div class="form-group">
                                             <select class="form-control" id="product-color">
+
                                             </select>
                                         </div>
 									</div>
@@ -61,15 +64,17 @@
 										<div class="col-item">
 											<div class="tt-input-counter style-01">
 												<span class="minus-btn"></span>
-												<input type="text" min="1" value="1" size="5">
+												<input type="number" min="1" value="1" size="5" id="quantity">
 												<span class="plus-btn"></span>
 											</div>
+                                            <input type="hidden" id="product-id">
 										</div>
 										<div class="col-item">
-											<a href="#" class="btn btn-lg"><i class="icon-f-39"></i>ADD TO CART</a>
+											<button type="button" class="btn btn-lg add-to-cart-modal"><i class="icon-f-39"></i>ADD TO CART</button>
 										</div>
 									</div>
 								</div>
+
 							</div>
 						</div>
 					</div>

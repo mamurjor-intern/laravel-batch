@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Product;
+use Cart;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -20,6 +21,34 @@ class ProductController extends Controller
                     'product' => $product
                 ]);
             }
+        }
+    }
+
+
+    public function addToCartModal(Request $request){
+        if ($request->ajax()) {
+            $product = Product::findOrFail($request->product_id);
+            $cart = Cart::add(
+                $product->id,
+                $product->name,
+                $product->price,
+                $request->qty,
+                array(
+                    'size'          => $request->size,
+                    'color'         => $request->color,
+                    'discountPrice' => $product->discount_price
+                )
+            );
+
+            if ($cart == true) {
+                $output = ['status'=>'success','message'=>'Product add to cart successfully.'];
+            }
+            else{
+                $output = ['status'=>'error','message'=>'Product add to cart somting wrong!'];
+            }
+
+            return response()->json($output);
+
         }
     }
 }

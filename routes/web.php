@@ -31,7 +31,11 @@ Route::group(['as'=>'frontend.'], function(){
     Route::get('/',[FrontController::class, 'index']);
     //---------------- Product -----------------//
     Route::group(['as'=>'product.'], function(){
-        Route::post('product/quick-view',[ProductController::class, 'quickView'])->name('quick-view');
+        Route::post('product/quick-view',[ProductController::class, 'quickView'])
+            ->name('quick-view');
+        Route::post('product/add-to-cart/modal',[ProductController::class, 'addToCartModal'])
+            ->name('add-to-cart.modal');
+
     });
 
 });
