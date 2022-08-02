@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Session;  
 use DataTables;
 
 class CategoryController extends Controller
@@ -154,7 +154,7 @@ class CategoryController extends Controller
 
     }
 
-    
+
     public function categoryStatus(Request $request){
         if ($request->ajax()) {
             if($request->status != 'Pending'){
